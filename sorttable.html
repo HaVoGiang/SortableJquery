@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class='span4'>
+        <ol class='serialization vertical'>
+            <li data-id="1" data-title="Thác Yang Bay" data-timestart="480" data-timein="60" data-timefree="0">
+                <input type="text" name="LastName" value="Mouse">
+            </li>
+            <li data-id="2" data-title="Nhà thờ Núi (Nhà thờ chính tòa Kitô Vua)" data-timestart="480" data-timein="60"
+                data-timefree="0">
+            </li>
+            <li data-id="3" data-title="Tháp Bà Ponagar" data-timestart="480" data-timein="60" data-timefree="0">
+            </li>
+            <li data-id="4" data-title="Biển Nha Trang" data-timestart="480" data-timein="60" data-timefree="0">
+            </li>
+            <li data-id="5" data-title="Nhà hát nghệ thuật dân gian Á Châu" data-timestart="480" data-timein="60"
+                data-timefree="0">
+            </li>
+            <li data-id="6" data-title="XQ Sử Quán" data-timestart="480" data-timein="60" data-timefree="0">
+            </li>
+        </ol>
+        <ol class='serialization vertical'>
+            <li data-id="7" data-title="Thác Yang Bay" data-timestart="480" data-timein="900" data-timefree="0">
+            </li>
+            <li data-id="8" data-title="Nhà thờ Núi (Nhà thờ chính tòa Kitô Vua)" data-timestart="480" data-timein="60"
+                data-timefree="0">
+            </li>
+            <li data-id="9" data-title="Tháp Bà Ponagar" data-timestart="480" data-timein="60" data-timefree="0">
+            </li>
+        </ol>
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"
+        integrity="sha256-wS9gmOZBqsqWxgIVgA8Y9WcQOa7PgSIX+rPA0VL2rbQ=" crossorigin="anonymous"></script>
+    <script src='js/jquery-sortable.js'></script>
+    <!-- <script src="Sortable.js"></script> -->
+    <script>
+
+        var group = $("ol.serialization").sortable({
+            group: 'serialization',
+            onDrop: function ($item, container, _super) {
+                var data = group.sortable("serialize").get();
+                console.log(data);
+                if (CheckData(data)) {
+                    LoadData(data, $item, container, _super);
+                } else {
+                    return false;
+                }
+                _super($item, container);
+            }
+
+        });
+        function CheckData(data) {
+            var sum = 0;
+            for (i = 0; i < data.length; i++) {
+                for (j = 0; j < data[i].length; j++) {
+                    sum += (data[i][j].timein + data[i][j].timefree);
+                    if (sum / 60 > 21) {
+                        alert("Không đủ thời gian trong ngày");
+                        return false;
+                    }
+                }
+                sum = 0;
+            }
+            return true;
+        }
+        function LoadData(data, $item, container, _super) {
+            for (i = 0; i < data.length; i++) {
+                for (j = 0; j < data[i].length; j++) {
+                    //console.log(data[i][j]);
+                    txtResults = "Nơi đến: " + data[i][j].title + ", Thời gian bắt đầu: <input class = \"txtTimeStart\" style=\"width: 40px;\" type=\"number\" value=\"" + data[i][j].timestart / 60 + "\">h, Thời gian lưu trú: <input class = \"txtTimeIn\" style=\"width: 40px;\" type=\"number\" value=\"" + data[i][j].timein / 60 + "\">h <button type=\"button\">Ok</button>";
+                    $("li[data-id=" + data[i][j].id + "]").html(txtResults);
+                }
+            }
+        }
+        function ChangeTime() {
+            alert("asd");
+        }
+        $(document).ready(function () {
+            var data = group.sortable("serialize").get();
+
+            CheckData(data);
+            LoadData(data);
+        });
+    </script>
+</body>
+
+</html>
