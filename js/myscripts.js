@@ -47,8 +47,7 @@ var group = $("ol.serialization").sortable({
     group: 'serialization',
     onDrop: function ($item, container, _super) {
         var data = group.sortable("serialize").get();
-        console.log(data);
-        UpdateData(data, data[0][0].timein);
+        UpdateData(data, 8);
         LoadView(data);
         _super($item, container);
     }
