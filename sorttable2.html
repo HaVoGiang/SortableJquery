@@ -13,7 +13,42 @@
 </head>
 
 <body>
-<div id = "sort-table"></div>
+    <div id="sort-table">
+        <ol id="list-data" hidden>
+            <li data-id="6" data-title="XQ Sử Quán" data-timestart="12" data-timein="2" data-timefree="0" class="">Nơi
+                đến: XQ Sử Quán, Thời gian bắt đầu: <input class="txtTimeStart" style="width: 40px;" type="number"
+                    value="8">h, Thời gian lưu trú: <input class="txtTimeIn" style="width: 40px;" type="number"
+                    value="2">h <button onclick="btnSubmit(0,0)" type="button">Ok</button>
+            </li>
+            <li data-id="1" data-title="Thác Yang Bay" data-timestart="8" data-timein="8" data-timefree="0" class="">Nơi
+                đến: Thác Yang Bay, Thời gian bắt đầu: <input class="txtTimeStart" style="width: 40px;" type="number"
+                    value="10">h, Thời gian lưu trú: <input class="txtTimeIn" style="width: 40px;" type="number"
+                    value="8">h <button onclick="btnSubmit(0,1)" type="button">Ok</button>
+            </li>
+            <li data-id="4" data-title="Biển Nha Trang" data-timestart="8" data-timein="2" data-timefree="0" class="">
+                Nơi đến: Biển Nha Trang, Thời gian bắt đầu: <input class="txtTimeStart" style="width: 40px;"
+                    type="number" value="23">h, Thời gian lưu trú: <input class="txtTimeIn" style="width: 40px;"
+                    type="number" value="2">h <button onclick="btnSubmit(0,3)" type="button">Ok</button>
+            </li>
+            <li data-id="8" data-title="Nhà thờ Núi (Nhà thờ chính tòa Kitô Vua)" data-timestart="19" data-timein="2"
+                data-timefree="0" class="">Nơi đến: Nhà thờ Núi (Nhà thờ chính tòa Kitô Vua), Thời gian bắt đầu: <input
+                    class="txtTimeStart" style="width: 40px;" type="number" value="25">h, Thời gian lưu trú: <input
+                    class="txtTimeIn" style="width: 40px;" type="number" value="2">h <button onclick="btnSubmit(0,4)"
+                    type="button">Ok</button>
+            </li>
+            <li data-id="5" data-title="Nhà hát nghệ thuật dân gian Á Châu" data-timestart="10" data-timein="2"
+                data-timefree="0" class="">Nơi đến: Nhà hát nghệ thuật dân gian Á Châu, Thời gian bắt đầu: <input
+                    class="txtTimeStart" style="width: 40px;" type="number" value="27">h, Thời gian lưu trú: <input
+                    class="txtTimeIn" style="width: 40px;" type="number" value="2">h <button onclick="btnSubmit(0,5)"
+                    type="button">Ok</button>
+            </li>
+            <li data-id="9" data-title="Tháp Bà Ponagar" data-timestart="8" data-timein="2" data-timefree="0" class="">
+                Nơi đến: Tháp Bà Ponagar, Thời gian bắt đầu: <input class="txtTimeStart" style="width: 40px;"
+                    type="number" value="29">h, Thời gian lưu trú: <input class="txtTimeIn" style="width: 40px;"
+                    type="number" value="2">h <button onclick="btnSubmit(0,6)" type="button">Ok</button>
+            </li>
+        </ol>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         integrity="sha256-wS9gmOZBqsqWxgIVgA8Y9WcQOa7PgSIX+rPA0VL2rbQ=" crossorigin="anonymous"></script>
     <script src='js/jquery-sortable.js'></script>

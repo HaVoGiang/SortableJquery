@@ -1,10 +1,16 @@
-var dataArr = [{ "id": 1, "title": "Thác Yang Bay", "timestart": 7, "timein": 8, "timefree": 0 }, { "id": 2, "title": "Nhà thờ Núi (Nhà thờ chính tòa Kitô Vua)", "timestart": 10, "timein": 2, "timefree": 0 }, { "id": 3, "title": "Tháp Bà Ponagar", "timestart": 10, "timein": 2, "timefree": 0 }, { "id": 4, "title": "Biển Nha Trang", "timestart": 13, "timein": 2, "timefree": 0 }, { "id": 5, "title": "Nhà hát nghệ thuật dân gian Á Châu", "timestart": 15, "timein": 2, "timefree": 0 }, { "id": 6, "title": "XQ Sử Quán", "timestart": 18, "timein": 2, "timefree": 0 }, { "id": 7, "title": "Thác Yang Bay", "timestart": 8, "timein": 5, "timefree": 0 }, { "id": 8, "title": "Nhà thờ Núi (Nhà thờ chính tòa Kitô Vua)", "timestart": 11, "timein": 2, "timefree": 0 }, { "id": 9, "title": "Tháp Bà Ponagar", "timestart": 16, "timein": 2, "timefree": 0 }];
+// var dataArr = [{ "id": 1, "title": "Thác Yang Bay", "timestart": 7, "timein": 8, "timefree": 0 }, { "id": 2, "title": "Nhà thờ Núi (Nhà thờ chính tòa Kitô Vua)", "timestart": 10, "timein": 2, "timefree": 0 }, { "id": 3, "title": "Tháp Bà Ponagar", "timestart": 10, "timein": 2, "timefree": 0 }, { "id": 4, "title": "Biển Nha Trang", "timestart": 13, "timein": 2, "timefree": 0 }, { "id": 5, "title": "Nhà hát nghệ thuật dân gian Á Châu", "timestart": 15, "timein": 2, "timefree": 0 }, { "id": 6, "title": "XQ Sử Quán", "timestart": 18, "timein": 2, "timefree": 0 }, { "id": 7, "title": "Thác Yang Bay", "timestart": 8, "timein": 5, "timefree": 0 }, { "id": 8, "title": "Nhà thờ Núi (Nhà thờ chính tòa Kitô Vua)", "timestart": 11, "timein": 2, "timefree": 0 }, { "id": 9, "title": "Tháp Bà Ponagar", "timestart": 16, "timein": 2, "timefree": 0 }];
 
-var dayNum = 3;
+var dataArr = [];
+var listData = $("#list-data li");
+for(i = 0; i < listData.length; i++){
+    dataArr.push($("li[data-id=" + listData[i].dataset.id + "]").data());
+}
+
+var dayNum = 5;
 var dataDayArr = new Array();
 var sum = 0, k = 0;
 for (i = 0; i < dayNum; i++) {
-    var arrTemp = new Array();
+    var arrTemp = [];
     for (j = k; j < dataArr.length; j++) {
         sum += dataArr[j].timein;
         if (sum > 13) {
@@ -12,11 +18,11 @@ for (i = 0; i < dayNum; i++) {
             sum = 0;
             break;
         } else {
+            k ++;
             arrTemp.push(dataArr[j]);
         }
     }
     dataDayArr.push(arrTemp);
-    arrTemp = [];
 }
 
 UpdateData(dataDayArr, 8);
