@@ -1,11 +1,13 @@
 // var dataArr = [{ "id": 1, "title": "Thác Yang Bay", "timestart": 7, "timein": 8, "timefree": 0 }, { "id": 2, "title": "Nhà thờ Núi (Nhà thờ chính tòa Kitô Vua)", "timestart": 10, "timein": 2, "timefree": 0 }, { "id": 3, "title": "Tháp Bà Ponagar", "timestart": 10, "timein": 2, "timefree": 0 }, { "id": 4, "title": "Biển Nha Trang", "timestart": 13, "timein": 2, "timefree": 0 }, { "id": 5, "title": "Nhà hát nghệ thuật dân gian Á Châu", "timestart": 15, "timein": 2, "timefree": 0 }, { "id": 6, "title": "XQ Sử Quán", "timestart": 18, "timein": 2, "timefree": 0 }, { "id": 7, "title": "Thác Yang Bay", "timestart": 8, "timein": 5, "timefree": 0 }, { "id": 8, "title": "Nhà thờ Núi (Nhà thờ chính tòa Kitô Vua)", "timestart": 11, "timein": 2, "timefree": 0 }, { "id": 9, "title": "Tháp Bà Ponagar", "timestart": 16, "timein": 2, "timefree": 0 }];
 
+
 var dataArr = [];
+var data;
 var listData = $("#list-data li");
 for(i = 0; i < listData.length; i++){
     dataArr.push($("li[data-id=" + listData[i].dataset.id + "]").data());
 }
-
+console.log(dataArr);
 var dayNum = 5;
 var dataDayArr = new Array();
 var sum = 0, k = 0;
@@ -52,7 +54,7 @@ for (i = 0; i < dataDayArr.length; i++) {
 var group = $("ol.serialization").sortable({
     group: 'serialization',
     onDrop: function ($item, container, _super) {
-        var data = group.sortable("serialize").get();
+        data = group.sortable("serialize").get();
         UpdateData(data, 8);
         LoadView(data);
         _super($item, container);
@@ -80,11 +82,12 @@ function btnSubmit(a, b) {
             } else {
                 if (j !== 0) {
                     data[i][j].timestart = parseInt(data[i][j - 1].timestart) + parseInt(data[i][j - 1].timein);
+                    data[i][j].timein = $("li[data-id=" + data[i][j].id + "] > .txtTimeIn").val();
                 }
             }
             var rs = "Nơi đến: " + data[i][j].title + ", Thời gian bắt đầu: <input class = \"txtTimeStart\" style=\"width: 40px;\" type=\"number\" value=\"" + data[i][j].timestart + "\">h, Thời gian lưu trú: <input class = \"txtTimeIn\" style=\"width: 40px;\" type=\"number\" value=\"" + data[i][j].timein + "\">h <button onClick = \"btnSubmit(" + i + "," + j + ")\" type=\"button\">Ok</button>"
             $("li[data-id=" + data[i][j].id + "]").html(rs);
         }
     }
-
+    data = group.sortable("serialize").get();
 }
