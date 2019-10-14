@@ -47,6 +47,7 @@ var group = $("ol.serialization").sortable({
     group: 'serialization',
     onDrop: function ($item, container, _super) {
         var data = group.sortable("serialize").get();
+        console.log(data);
         UpdateData(data, data[0][0].timein);
         LoadView(data);
         _super($item, container);
@@ -65,17 +66,20 @@ function LoadView(data) {
 
 function btnSubmit(a, b) {
     data = group.sortable("serialize").get();
-    data[i][j].timestart = $("li[data-id=" + data[i][j].id + "] > .txtTimeStart").val();
-    data[i][j].timein = $("li[data-id=" + data[i][j].id + "] > .txtTimeIn").val();
-    for (i = a + 1; i < data.length; i++) {
-        for (j = b + 1; j < data[i].length; j++) {
-            if (j != 0) {
-                data[i][j].timestart = parseInt(data[i][j - 1].timestart) + parseInt(data[i][j - 1].timein);
-            }
-        }
-        break;
-    }
     console.log(data);
-    LoadView(data);
+    for (i = a; i < data.length; i++) {
+        for (j = b; j < data[i].length; j++) {
+            if (i === a && j === b) {
+                data[i][j].timestart = $("li[data-id=" + data[i][j].id + "] > .txtTimeStart").val();
+                data[i][j].timein = $("li[data-id=" + data[i][j].id + "] > .txtTimeIn").val();
+            } else {
+                if (j !== 0) {
+                    data[i][j].timestart = parseInt(data[i][j - 1].timestart) + parseInt(data[i][j - 1].timein);
+                }
+            }
+            var rs = "Nơi đến: " + data[i][j].title + ", Thời gian bắt đầu: <input class = \"txtTimeStart\" style=\"width: 40px;\" type=\"number\" value=\"" + data[i][j].timestart + "\">h, Thời gian lưu trú: <input class = \"txtTimeIn\" style=\"width: 40px;\" type=\"number\" value=\"" + data[i][j].timein + "\">h <button onClick = \"btnSubmit(" + i + "," + j + ")\" type=\"button\">Ok</button>"
+            $("li[data-id=" + data[i][j].id + "]").html(rs);
+        }
+    }
 
 }
