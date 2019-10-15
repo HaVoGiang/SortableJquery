@@ -60,12 +60,7 @@ var group = $("ol.serialization").sortable({
     onDrop: function ($item, container, _super) {
         data = group.sortable("serialize").get();
         if (!checkData(data)) {
-            for (i = 0; i < dataDayArr.length; i++) {
-                $('.olid' + i ).empty();
-                for (j = 0; j < dataDayArr[i].length; j++) {
-                    $('.olid' + i).append("<li data-id=\"" + dataDayArr[i][j].id + "\" data-title=\"" + dataDayArr[i][j].title + "\" data-timestart=\"" + dataDayArr[i][j].timestart + "\" data-timein=\"" + dataDayArr[i][j].timein + "\" data-timefree=\"" + dataDayArr[i][j].timefree + "\">Nơi đến: " + dataDayArr[i][j].title + ", Thời gian bắt đầu: <input class = \"txtTimeStart\" style=\"width: 40px;\" type=\"number\" value=\"" + dataDayArr[i][j].timestart + "\">h, Thời gian lưu trú: <input class = \"txtTimeIn\" style=\"width: 40px;\" type=\"number\" value=\"" + dataDayArr[i][j].timein + "\">h <button onClick = \"btnSubmit(" + i + "," + j + ")\" type=\"button\">Ok</button></li>");
-                }
-            }
+            Refresh();
             return;
         }
         UpdateData(data, 8);
@@ -94,7 +89,14 @@ function checkData(data) {
     }
     return true;
 }
-
+function Refresh(){
+    for (i = 0; i < dataDayArr.length; i++) {
+        $('.olid' + i ).empty();
+        for (j = 0; j < dataDayArr[i].length; j++) {
+            $('.olid' + i).append("<li data-id=\"" + dataDayArr[i][j].id + "\" data-title=\"" + dataDayArr[i][j].title + "\" data-timestart=\"" + dataDayArr[i][j].timestart + "\" data-timein=\"" + dataDayArr[i][j].timein + "\" data-timefree=\"" + dataDayArr[i][j].timefree + "\">Nơi đến: " + dataDayArr[i][j].title + ", Thời gian bắt đầu: <input class = \"txtTimeStart\" style=\"width: 40px;\" type=\"number\" value=\"" + dataDayArr[i][j].timestart + "\">h, Thời gian lưu trú: <input class = \"txtTimeIn\" style=\"width: 40px;\" type=\"number\" value=\"" + dataDayArr[i][j].timein + "\">h <button onClick = \"btnSubmit(" + i + "," + j + ")\" type=\"button\">Ok</button></li>");
+        }
+    }
+}
 function LoadView(data) {
     for (i = 0; i < data.length; i++) {
         for (j = 0; j < data[i].length; j++) {
@@ -121,6 +123,11 @@ function btnSubmit(a, b) {
             $("li[data-id=" + data[i][j].id + "]").html(rs);
         }
         break;
+    }
+    
+    if(!checkData(data)){
+        Refresh();
+        return;
     }
     dataDayArr = data;
 }
