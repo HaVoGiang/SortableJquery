@@ -2,12 +2,11 @@
 
 
 var dataArr = [];
-var data;
 var listData = $("#list-data li");
-for(i = 0; i < listData.length; i++){
+for (i = 0; i < listData.length; i++) {
     dataArr.push($("li[data-id=" + listData[i].dataset.id + "]").data());
 }
-console.log(dataArr);
+
 var dayNum = 5;
 var dataDayArr = new Array();
 var sum = 0, k = 0;
@@ -20,7 +19,7 @@ for (i = 0; i < dayNum; i++) {
             sum = 0;
             break;
         } else {
-            k ++;
+            k++;
             arrTemp.push(dataArr[j]);
         }
     }
@@ -38,6 +37,7 @@ function UpdateData(data, timestartContainer) {
             }
         }
     }
+    oldData = data;
 }
 
 
@@ -51,15 +51,19 @@ for (i = 0; i < dataDayArr.length; i++) {
         $('.olid' + i).append("<li data-id=\"" + dataDayArr[i][j].id + "\" data-title=\"" + dataDayArr[i][j].title + "\" data-timestart=\"" + dataDayArr[i][j].timestart + "\" data-timein=\"" + dataDayArr[i][j].timein + "\" data-timefree=\"" + dataDayArr[i][j].timefree + "\">Nơi đến: " + dataDayArr[i][j].title + ", Thời gian bắt đầu: <input class = \"txtTimeStart\" style=\"width: 40px;\" type=\"number\" value=\"" + dataDayArr[i][j].timestart + "\">h, Thời gian lưu trú: <input class = \"txtTimeIn\" style=\"width: 40px;\" type=\"number\" value=\"" + dataDayArr[i][j].timein + "\">h <button onClick = \"btnSubmit(" + i + "," + j + ")\" type=\"button\">Ok</button></li>");
     }
 }
+var oldData = [];
 var group = $("ol.serialization").sortable({
     group: 'serialization',
+
     onDrop: function ($item, container, _super) {
-        data = group.sortable("serialize").get();
+        var data = group.sortable("serialize").get();
+
         UpdateData(data, 8);
         LoadView(data);
+        console.log($item);
         _super($item, container);
-    }
 
+    }
 });
 
 function LoadView(data) {
@@ -72,8 +76,11 @@ function LoadView(data) {
 }
 
 function btnSubmit(a, b) {
-    data = group.sortable("serialize").get();
-    console.log(data);
+    if (oldData.length === 0) {
+        var data = group.sortable("serialize").get();
+    } else {
+        var data = oldData;
+    }
     for (i = a; i < data.length; i++) {
         for (j = b; j < data[i].length; j++) {
             if (i === a && j === b) {
@@ -88,6 +95,7 @@ function btnSubmit(a, b) {
             var rs = "Nơi đến: " + data[i][j].title + ", Thời gian bắt đầu: <input class = \"txtTimeStart\" style=\"width: 40px;\" type=\"number\" value=\"" + data[i][j].timestart + "\">h, Thời gian lưu trú: <input class = \"txtTimeIn\" style=\"width: 40px;\" type=\"number\" value=\"" + data[i][j].timein + "\">h <button onClick = \"btnSubmit(" + i + "," + j + ")\" type=\"button\">Ok</button>"
             $("li[data-id=" + data[i][j].id + "]").html(rs);
         }
+        break;
     }
-    data = group.sortable("serialize").get();
+    oldData = data;
 }
