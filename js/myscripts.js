@@ -2,6 +2,7 @@
 
 
 var dataArr = [];
+var data = [];
 var listData = $("#list-data li");
 for (i = 0; i < listData.length; i++) {
     dataArr.push($("li[data-id=" + listData[i].dataset.id + "]").data());
@@ -32,12 +33,14 @@ function UpdateData(data, timestartContainer) {
         for (j = 0; j < data[i].length; j++) {
             if (j == 0) {
                 data[i][0].timestart = timestartContainer;
+                data[i][0].timein = parseInt($("li[data-id=" + data[i][j].id + "] > .txtTimeIn").val());
             } else {
-                data[i][j].timestart = parseInt(data[i][j - 1].timestart) + parseInt(data[i][j - 1].timein);
+                data[i][j].timestart = data[i][j - 1].timestart + data[i][j - 1].timein;
+                data[i][j].timein = parseInt($("li[data-id=" + data[i][j].id + "] > .txtTimeIn").val());
             }
         }
     }
-    oldData = data;
+    dataDayArr = data;
 }
 
 
@@ -51,45 +54,67 @@ for (i = 0; i < dataDayArr.length; i++) {
         $('.olid' + i).append("<li data-id=\"" + dataDayArr[i][j].id + "\" data-title=\"" + dataDayArr[i][j].title + "\" data-timestart=\"" + dataDayArr[i][j].timestart + "\" data-timein=\"" + dataDayArr[i][j].timein + "\" data-timefree=\"" + dataDayArr[i][j].timefree + "\">Nơi đến: " + dataDayArr[i][j].title + ", Thời gian bắt đầu: <input class = \"txtTimeStart\" style=\"width: 40px;\" type=\"number\" value=\"" + dataDayArr[i][j].timestart + "\">h, Thời gian lưu trú: <input class = \"txtTimeIn\" style=\"width: 40px;\" type=\"number\" value=\"" + dataDayArr[i][j].timein + "\">h <button onClick = \"btnSubmit(" + i + "," + j + ")\" type=\"button\">Ok</button></li>");
     }
 }
-var oldData = [];
+var oldPosition;
 var group = $("ol.serialization").sortable({
     group: 'serialization',
-
     onDrop: function ($item, container, _super) {
-        var data = group.sortable("serialize").get();
-
+        data = group.sortable("serialize").get();
+        if (!checkData(data)) {
+            for (i = 0; i < dataDayArr.length; i++) {
+                $('.olid' + i ).empty();
+                for (j = 0; j < dataDayArr[i].length; j++) {
+                    $('.olid' + i).append("<li data-id=\"" + dataDayArr[i][j].id + "\" data-title=\"" + dataDayArr[i][j].title + "\" data-timestart=\"" + dataDayArr[i][j].timestart + "\" data-timein=\"" + dataDayArr[i][j].timein + "\" data-timefree=\"" + dataDayArr[i][j].timefree + "\">Nơi đến: " + dataDayArr[i][j].title + ", Thời gian bắt đầu: <input class = \"txtTimeStart\" style=\"width: 40px;\" type=\"number\" value=\"" + dataDayArr[i][j].timestart + "\">h, Thời gian lưu trú: <input class = \"txtTimeIn\" style=\"width: 40px;\" type=\"number\" value=\"" + dataDayArr[i][j].timein + "\">h <button onClick = \"btnSubmit(" + i + "," + j + ")\" type=\"button\">Ok</button></li>");
+                }
+            }
+            return;
+        }
         UpdateData(data, 8);
         LoadView(data);
-        console.log($item);
         _super($item, container);
-
+    },
+    onMousedown: function ($item, _super, event) {
+        if (!event.target.nodeName.match(/^(input|select|textarea)$/i)) {
+          event.preventDefault();
+          oldPosition = $item.position();
+          return true;
+        }
     }
 });
+
+function checkData(data) {
+    for (i = 0; i < data.length; i++) {
+        let sumData = 0;
+        for (j = 0; j < data[i].length; j++) {
+            sumData += data[i][j].timein;
+            if (sumData > 13) {
+                alert("Không đủ thời gian trong ngày!");
+                return false;
+            }
+        }
+    }
+    return true;
+}
 
 function LoadView(data) {
     for (i = 0; i < data.length; i++) {
         for (j = 0; j < data[i].length; j++) {
-            var rs = "Nơi đến: " + data[i][j].title + ", Thời gian bắt đầu: <input class = \"txtTimeStart\" style=\"width: 40px;\" type=\"number\" value=\"" + data[i][j].timestart + "\">h, Thời gian lưu trú: <input class = \"txtTimeIn\" style=\"width: 40px;\" type=\"number\" value=\"" + data[i][j].timein + "\">h <button onClick = \"btnSubmit(" + i + "," + j + ")\" type=\"button\">Ok</button>"
-            $("li[data-id=" + data[i][j].id + "]").html(rs);
+            var rs = "Nơi đến: " + dataDayArr[i][j].title + ", Thời gian bắt đầu: <input class = \"txtTimeStart\" style=\"width: 40px;\" type=\"number\" value=\"" + dataDayArr[i][j].timestart + "\">h, Thời gian lưu trú: <input class = \"txtTimeIn\" style=\"width: 40px;\" type=\"number\" value=\"" + dataDayArr[i][j].timein + "\">h <button onClick = \"btnSubmit(" + i + "," + j + ")\" type=\"button\">Ok</button>"
+            $("li[data-id=" + dataDayArr[i][j].id + "]").html(rs);
         }
     }
 }
 
 function btnSubmit(a, b) {
-    if (oldData.length === 0) {
-        var data = group.sortable("serialize").get();
-    } else {
-        var data = oldData;
-    }
+    data = group.sortable("serialize").get();
     for (i = a; i < data.length; i++) {
         for (j = b; j < data[i].length; j++) {
             if (i === a && j === b) {
-                data[i][j].timestart = $("li[data-id=" + data[i][j].id + "] > .txtTimeStart").val();
-                data[i][j].timein = $("li[data-id=" + data[i][j].id + "] > .txtTimeIn").val();
+                data[i][j].timestart = parseInt($("li[data-id=" + data[i][j].id + "] > .txtTimeStart").val());
+                data[i][j].timein = parseInt($("li[data-id=" + data[i][j].id + "] > .txtTimeIn").val());
             } else {
                 if (j !== 0) {
-                    data[i][j].timestart = parseInt(data[i][j - 1].timestart) + parseInt(data[i][j - 1].timein);
-                    data[i][j].timein = $("li[data-id=" + data[i][j].id + "] > .txtTimeIn").val();
+                    data[i][j].timestart = data[i][j - 1].timestart + data[i][j - 1].timein;
+                    data[i][j].timein = parseInt($("li[data-id=" + data[i][j].id + "] > .txtTimeIn").val());
                 }
             }
             var rs = "Nơi đến: " + data[i][j].title + ", Thời gian bắt đầu: <input class = \"txtTimeStart\" style=\"width: 40px;\" type=\"number\" value=\"" + data[i][j].timestart + "\">h, Thời gian lưu trú: <input class = \"txtTimeIn\" style=\"width: 40px;\" type=\"number\" value=\"" + data[i][j].timein + "\">h <button onClick = \"btnSubmit(" + i + "," + j + ")\" type=\"button\">Ok</button>"
@@ -97,5 +122,5 @@ function btnSubmit(a, b) {
         }
         break;
     }
-    oldData = data;
+    dataDayArr = data;
 }
